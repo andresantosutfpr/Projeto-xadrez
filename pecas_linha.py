@@ -2,35 +2,20 @@
 
 Notes
 -----
+Esse modulo foi criado pelo Luiz Gustavo(Github: Surslide) 
 O código prioriza legibilidade em vez de otimização, devido à natureza do projeto que não processa muitos dados.
 
 See Also
 --------
 tabuleiro
-    Módulo principal responsável pela execução do jogo de xadrez.
+    Módulo criado por Yuki, responsável pela execução do jogo de xadrez.
+capturas
+    Módulo criado por Danilo, responsável pela validação do movimento do rei e do cavalo
 """
-
+from capturas import (movimento_rei, movimento_cavalo)
 __all__ = ["caminho_livre"]
 
 _PERMITIDOS = ["■", "□"] #constante global, hash set seria uma melhor pratica
-
-def _absoluto(numero : int | float) -> int | float:
-    """Calcula o valor absoluto de um número.
-
-    Parameters
-    ----------
-    numero : int or float
-
-    Notes
-    -----
-    Função criada para substituir o abs padrão.
-
-    Returns
-    -------
-    int or float
-        O valor absoluto do número inserido como argumento.
-    """
-    return numero if numero >= 0 else numero * -1
 
 def _movimento_torre(linha_origem : int, coluna_origem : int, linha_destino : int, coluna_destino : int, tabuleiro : list[list[str]]) -> bool:
     """Verifica se a torre mover da origem ao destino é um movimento válido.
@@ -97,14 +82,9 @@ def _movimento_bispo(linha_origem : int, coluna_origem : int, linha_destino : in
     -------
     bool
         Retorna True se o movimento for válido, False se for inválido.
-
-    See Also
-    --------
-    _absoluto
-        Calcula o valor absoluto de um número.
     """
-    dif_linha = _absoluto(linha_destino - linha_origem)
-    dif_coluna = _absoluto(coluna_destino - coluna_origem)
+    dif_linha = abs(linha_destino - linha_origem)
+    dif_coluna = abs(coluna_destino - coluna_origem)
     if dif_linha != dif_coluna or dif_linha == 0:
         return False
     moveu_noroeste = linha_origem > linha_destino and coluna_origem > coluna_destino
@@ -205,4 +185,8 @@ def caminho_livre(linha_origem : int, coluna_origem : int, linha_destino : int, 
         return _movimento_bispo(linha_origem, coluna_origem, linha_destino, coluna_destino, tabuleiro)
     elif peca in ["♛", "♕"]:
         return _movimento_dama(linha_origem, coluna_origem, linha_destino, coluna_destino, tabuleiro)
+    elif peca in ["♞", "♘"]:
+        return movimento_cavalo((linha_origem, coluna_origem), (linha_destino, coluna_destino))
+    elif peca in ["♚", "♔"]:
+        return movimento_rei((linha_origem, coluna_origem), (linha_destino, coluna_destino))
     return False
