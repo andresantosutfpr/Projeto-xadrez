@@ -1,3 +1,5 @@
+from pecas_linha import caminho_livre
+
 def criar_tabuleiro():
     """Cria um tabuleiro 8x8 com as peças nas posições iniciais."""
 
@@ -59,12 +61,13 @@ def mover_peca(tabuleiro, origem, destino):
     peca = tabuleiro[linha_origem][coluna_origem]
     casa_origem = "□" if (linha_origem + coluna_origem) % 2 == 0 else "■"
 
-    # Move a peça
-    tabuleiro[linha_destino][coluna_destino] = peca
-    tabuleiro[linha_origem][coluna_origem] = casa_origem
+    if caminho_livre(linha_origem, coluna_origem, linha_destino, coluna_destino, peca, tabuleiro):
+        # Move a peça
+        tabuleiro[linha_destino][coluna_destino] = peca
+        tabuleiro[linha_origem][coluna_origem] = casa_origem
 
-    print("Peça movida com sucesso!")
-    return True
+        print("Peça movida com sucesso!")
+        return True
 
 
 # Programa principal
