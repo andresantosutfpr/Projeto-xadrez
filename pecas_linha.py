@@ -10,7 +10,7 @@ See Also
 tabuleiro
     Módulo criado por Yuki, responsável pela execução do jogo de xadrez.
 capturas
-    Módulo criado por Danilo, responsável pela validação do movimento do rei e do cavalo
+    Módulo criado por Danilo, responsável pela validação do movimento do rei e do cavalo.
 """
 from capturas import (movimento_rei, movimento_cavalo)
 __all__ = ["caminho_livre"]
@@ -151,6 +151,42 @@ def _movimento_dama(linha_origem : int, coluna_origem : int, linha_destino : int
 """/////////////////////////////////////////////////////// Parte do André (Peão) ///////////////////////////////////////////////////////"""
 
 def _movimento_peao(linha_origem : int, coluna_origem : int, linha_destino : int, coluna_destino : int,peca : str, tabuleiro : list[list[str]]) -> bool:
+    """Verifica se o peão movar da origem qo destino é um movimento válido.
+
+    Parameters
+    ----------
+    linha_origem : int
+        Linha onde o peão está atualmente.
+    coluna_origem : int
+        Coluna onde o peão está atualmente.
+    linha_destino : int
+        Linha onde o peão quer chegar.
+    coluna_destino : int
+        Coluna onde o peão quer chegar.
+    peca : str
+        Peão que será vefiricado, "♙" (branco) ou "♟" (preto).
+    tabuleiro : list[list[str]]
+        Tabuleiro onde será verificado se movimento é válido.
+    
+    Returns
+    -------
+    bools
+        Retorna True se o movimento for válido, False se for invélido.
+    
+    Notes
+    -------
+    As brancas sobem no tabuleiro (a linha diminui) e as pretas descem (a linha aumenta), então o peão nunca anda para trás.
+
+    Movimentos válidos:
+
+    -Avançar uma casa, com o destino vazio.
+    -Avançar duas casas, apenas se estiverem na linha inicial (6 para as brancas e 1 para as pretas), com a casa do meio e do destino vazios.
+    -Capturar na diagonal (uma linha a frente e uma colunapara qualquer lado), apenas se o destino tiver uma peça adversária.
+
+    O peão não captura para frente, e a diagonal sem peça adversária é inválida.
+
+    A função assume que o destino está desntro do tabuleiro, então quem a chama deve verificar antes com posicao_valida.
+    """
     dif_linha = (linha_destino - linha_origem)
     dif_coluna = abs(coluna_destino - coluna_origem)
     destino = tabuleiro[linha_destino][coluna_destino]
