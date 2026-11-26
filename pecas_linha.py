@@ -17,6 +17,9 @@ __all__ = ["caminho_livre"]
 
 _PERMITIDOS = ["■", "□"] #constante global, hash set seria uma melhor pratica
 
+_pretas = ["♟","♜","♞","♝","♛","♚"] #Provisório até o Danilo criar o mesmca_cor()
+_brancas = ["♙","♖","♘","♗","♕","♔"] #Provisório até o Danilo criar o mesmca_cor()
+
 def _movimento_torre(linha_origem : int, coluna_origem : int, linha_destino : int, coluna_destino : int, tabuleiro : list[list[str]]) -> bool:
     """Verifica se a torre mover da origem ao destino é um movimento válido.
     
@@ -145,10 +148,37 @@ def _movimento_dama(linha_origem : int, coluna_origem : int, linha_destino : int
         return True
     return _movimento_torre(linha_origem, coluna_origem, linha_destino, coluna_destino, tabuleiro)
 
+"""/////////////////////////////////////////////////////// Parte do André (Peão) ///////////////////////////////////////////////////////"""
+
+def _movimento_peao(linha_origem : int, coluna_origem : int, linha_destino : int, coluna_destino : int,peca : str, tabuleiro : list[list[str]]) -> bool:
+    dif_linha = (linha_destino - linha_origem)
+    dif_coluna = abs(coluna_destino - coluna_origem)
+    destino = tabuleiro[linha_destino][coluna_destino]
+    meio = tabuleiro[linha_origem + dif_linha // 2][coluna_origem]
+    
+    #Movimento
+    if peca in ["♙"] and dif_linha == -1 and dif_coluna == 0 and (destino in _PERMITIDOS):
+        return True
+    elif peca in ["♙"] and linha_origem == 6 and dif_linha == -2 and dif_coluna == 0 and (destino in _PERMITIDOS and meio in _PERMITIDOS):
+        return True
+    elif peca in ["♟"] and dif_linha == 1 and dif_coluna == 0 and (destino in _PERMITIDOS):
+        return True
+    elif peca in ["♟"] and linha_origem == 1 and dif_linha == 2 and dif_coluna == 0 and (destino in _PERMITIDOS and meio in _PERMITIDOS):
+        return True
+    #Captura
+    elif peca in ["♙"] and dif_linha == -1 and dif_coluna == 1 and (destino in _pretas):
+        return True
+    elif peca in ["♟"] and dif_linha == 1 and dif_coluna == 1 and (destino in _brancas):
+        return True
+    else:
+        return False
+    
+"""/////////////////////////////////////////////////////// FIM da Parte do André ///////////////////////////////////////////////////////"""
+
 def caminho_livre(linha_origem : int, coluna_origem : int, linha_destino : int, coluna_destino : int, peca : str, tabuleiro : list[list[str]]) -> bool:
     """Verifica se a peça mover da origem ao destino é um movimento válido.
     
-    Essa função deve impedir que Torres, Bispos e Damas atravessem peças.
+    Essa função deve impedir que Torres, Bispos, Damas e Peões atravessem peças.
 
     Parameters
     ----------
@@ -178,6 +208,8 @@ def caminho_livre(linha_origem : int, coluna_origem : int, linha_destino : int, 
         Verifica se o bispo mover da origem ao destino é um movimento válido.
     _movimento_dama
         Verifica se a dama mover da origem ao destino é um movimento válido.
+    _movimento_peao
+            Verifica se o peao mover da origem ao destino é um movimento válido.
     """
     if peca in ["♜", "♖"]:
         return _movimento_torre(linha_origem, coluna_origem, linha_destino, coluna_destino, tabuleiro)
@@ -189,4 +221,6 @@ def caminho_livre(linha_origem : int, coluna_origem : int, linha_destino : int, 
         return movimento_cavalo((linha_origem, coluna_origem), (linha_destino, coluna_destino))
     elif peca in ["♚", "♔"]:
         return movimento_rei((linha_origem, coluna_origem), (linha_destino, coluna_destino))
+    elif peca in ["♟", "♙"]:
+        return _movimento_peao(linha_origem, coluna_origem, linha_destino, coluna_destino, peca, tabuleiro)
     return False
