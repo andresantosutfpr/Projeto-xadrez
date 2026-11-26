@@ -1,4 +1,4 @@
-"""Módulo responsável pelo controle de turnos e pelas regras do peão.
+"""Módulo responsável pelo controle de turnos.
 
 Notes
 -----
