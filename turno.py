@@ -15,7 +15,7 @@ pecas_linha
 
 __all__ = ["controlar_turno", "trocar_turno"]
 
-_CASAS_VAZIAS = ["■", "□"]
+from pecas_linha import _PERMITIDOS
 
 def controlar_turno(tabuleiro : list[list[str]],linha_origem : int, coluna_origem : int,turno : str) -> bool:
     """Verifica se a peça da casa de origem pertence ao jogador da vez.
@@ -44,7 +44,7 @@ def controlar_turno(tabuleiro : list[list[str]],linha_origem : int, coluna_orige
     por quem chama a função.
     """
     peca = tabuleiro[linha_origem][coluna_origem]
-    if (peca not in _CASAS_VAZIAS):
+    if (peca not in _PERMITIDOS):
         if (peca in ["♙","♖","♘","♗","♕","♔"] and turno == "brancas") or (peca in ["♟","♜","♞","♝","♛","♚"] and turno == "pretas"):
             return True
         else:
