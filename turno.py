@@ -15,7 +15,7 @@ pecas_linha
 
 __all__ = ["controlar_turno", "trocar_turno"]
 
-from pecas_linha import _PERMITIDOS
+from pecas_linha import _PERMITIDOS #São as casas vazias ("■", "□").
 
 def controlar_turno(tabuleiro : list[list[str]],linha_origem : int, coluna_origem : int,turno : str) -> bool:
     """Verifica se a peça da casa de origem pertence ao jogador da vez.
